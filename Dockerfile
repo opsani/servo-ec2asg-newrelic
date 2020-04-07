@@ -6,7 +6,8 @@ WORKDIR /servo
 RUN pip3 install requests PyYAML python-dateutil boto3 && \
 	apt-get update && apt-get install -y --no-install-recommends \
     python3-boto \
-    python3-botocore
+    python3-botocore \
+    jq
 
 # Change /usr/bin/python3 => /usr/local/bin/python3, since the first is older,
 # so that import of boto3 works
@@ -15,10 +16,9 @@ RUN rm -f /usr/bin/python3 && \
 
 # Install servo:  ec2asg adjust (with its own adjust.py base class) and
 # newrelic measure (which uses the servo base measure.py)
-# Note:  will eventually require the EC2WIN driver and .NET encoder
-ADD https://raw.githubusercontent.com/opsani/servo-ec2asg/master/adjust \
-    https://raw.githubusercontent.com/opsani/servo-ec2asg/master/adjust.py \
-    https://raw.githubusercontent.com/opsani/servo-newrelic/master/measure \
+ADD https://raw.githubusercontent.com/opsani/servo-ec2asg/extract-inst-ids/adjust \
+    https://raw.githubusercontent.com/opsani/servo-ec2asg/extract-inst-ids/adjust.py \
+    https://raw.githubusercontent.com/opsani/servo-newrelic/monitoring-instance-ids/measure \
     https://raw.githubusercontent.com/opsani/servo/master/measure.py \
     https://raw.githubusercontent.com/opsani/servo/master/servo \
     /servo/
